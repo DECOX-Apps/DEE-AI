@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>DEE AI - Trợ Lý Trí Tuệ Nhân Tạo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *, *::before, *::after {
+      font-family: 'Quicksand', 'Roboto', sans-serif !important;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .brand-font, h1, h2, h3 {
+      font-family: 'Fredoka', 'Quicksand', sans-serif !important;
+    }
+
+    code, pre, code *, pre * {
+      font-family: 'Roboto', monospace !important;
+    }
+
+    :root[data-theme="dark"] {
+      --bg-gradient: linear-gradient(145deg, #070913 0%, #0b1020 50%, #0f1629 100%);
+      --orb-1: rgba(56, 189, 248, 0.28);
+      --orb-2: rgba(139, 92, 246, 0.30);
+      --orb-3: rgba(236, 72, 153, 0.20);
+      --orb-4: rgba(45, 212, 191, 0.22);
+      --glass-bg: rgba(20, 26, 46, 0.65);
+      --glass-bg-elevated: rgba(26, 34, 60, 0.78);
+      --glass-bg-hover: rgba(38, 49, 86, 0.88);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-border-strong: rgba(255, 255, 255, 0.26);
+      --glass-specular: inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -1px 1px rgba(255, 255, 255, 0.05);
+      --glass-shadow: 0 12px 38px rgba(0, 0, 0, 0.48);
+      --user-bubble-bg: linear-gradient(135deg, rgba(14, 165, 233, 0.42), rgba(99, 102, 241, 0.48));
+      --user-bubble-border: rgba(125, 211, 252, 0.42);
+      --user-bubble-text: #f8fafc;
+      --ai-bubble-bg: rgba(20, 26, 46, 0.72);
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-glow: rgba(56, 189, 248, 0.42);
+      --code-bg: rgba(7, 10, 22, 0.88);
+      --code-header: rgba(255, 255, 255, 0.07);
+      --inline-code-bg: rgba(56, 189, 248, 0.18);
+      --inline-code-text: #7dd3fc;
+      --scrollbar-thumb: rgba(255, 255, 255, 0.18);
+      --status-bg: rgba(16, 185, 129, 0.16);
+      --status-text: #34d399;
+      --status-border: rgba(52, 211, 153, 0.35);
+      --shield-bg: rgba(56, 189, 248, 0.16);
+      --shield-text: #38bdf8;
+      --shield-border: rgba(56, 189, 248, 0.35);
+    }
+
+    :root[data-theme="light"] {
+      --bg-gradient: linear-gradient(145deg, #eef4ff 0%, #f3f7ff 52%, #f8fafc 100%);
+      --orb-1: rgba(56, 189, 248, 0.32);
+      --orb-2: rgba(167, 139, 250, 0.28);
+      --orb-3: rgba(244, 114, 182, 0.22);
+      --orb-4: rgba(52, 211, 153, 0.24);
+      --glass-bg: rgba(255, 255, 255, 0.72);
+      --glass-bg-elevated: rgba(255, 255, 255, 0.86);
+      --glass-bg-hover: rgba(255, 255, 255, 0.96);
+      --glass-border: rgba(15, 23, 42, 0.12);
+      --glass-border-strong: rgba(15, 23, 42, 0.20);
+      --glass-specular: inset 0 1px 1.5px rgba(255, 255, 255, 0.95), inset 0 -1px 1px rgba(15, 23, 42, 0.06);
+      --glass-shadow: 0 10px 32px rgba(15, 23, 42, 0.08);
+      --user-bubble-bg: linear-gradient(135deg, #0284c7, #4f46e5);
+      --user-bubble-border: rgba(255, 255, 255, 0.65);
+      --user-bubble-text: #ffffff;
+      --ai-bubble-bg: rgba(255, 255, 255, 0.78);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --accent-glow: rgba(14, 165, 233, 0.28);
+      --code-bg: #0f172a;
+      --code-header: rgba(255, 255, 255, 0.08);
+      --inline-code-bg: rgba(2, 132, 199, 0.12);
+      --inline-code-text: #0369a1;
+      --scrollbar-thumb: rgba(15, 23, 42, 0.18);
+      --status-bg: rgba(16, 185, 129, 0.14);
+      --status-text: #047857;
+      --status-border: rgba(5, 150, 105, 0.30);
+      --shield-bg: rgba(2, 132, 199, 0.12);
+      --shield-text: #0369a1;
+      --shield-border: rgba(2, 132, 199, 0.28);
+    }
+
+    html, body {
+      height: 100dvh;
+      max-height: 100dvh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      transition: background 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.35s ease;
+    }
+
+    .ambient-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .mesh-orb {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(78px);
+      opacity: 0.92;
+      will-change: transform;
+      transition: background 0.6s ease;
+    }
+
+    .orb-1 {
+      width: 48vw;
+      height: 48vw;
+      max-width: 560px;
+      max-height: 560px;
+      min-width: 240px;
+      min-height: 240px;
+      top: -10%;
+      left: -8%;
+      background: radial-gradient(circle, var(--orb-1) 0%, transparent 72%);
+      animation: floatOrbOne 18s ease-in-out infinite alternate;
+    }
+
+    .orb-2 {
+      width: 52vw;
+      height: 52vw;
+      max-width: 620px;
+      max-height: 620px;
+      min-width: 260px;
+      min-height: 260px;
+      top: 18%;
+      right: -12%;
+      background: radial-gradient(circle, var(--orb-2) 0%, transparent 72%);
+      animation: floatOrbTwo 22s ease-in-out infinite alternate;
+    }
+
+    .orb-3 {
+      width: 46vw;
+      height: 46vw;
+      max-width: 520px;
+      max-height: 520px;
+      min-width: 220px;
+      min-height: 220px;
+      bottom: -12%;
+      left: 16%;
+      background: radial-gradient(circle, var(--orb-3) 0%, transparent 72%);
+      animation: floatOrbThree 20s ease-in-out infinite alternate;
+    }
+
+    .orb-4 {
+      width: 38vw;
+      height: 38vw;
+      max-width: 420px;
+      max-height: 420px;
+      min-width: 200px;
+      min-height: 200px;
+      bottom: 12%;
+      right: 12%;
+      background: radial-gradient(circle, var(--orb-4) 0%, transparent 72%);
+      animation: floatOrbOne 25s ease-in-out infinite alternate-reverse;
+    }
+
+    .orb-5 {
+      width: 42vw;
+      height: 42vw;
+      max-width: 480px;
+      max-height: 480px;
+      min-width: 210px;
+      min-height: 210px;
+      top: 42%;
+      left: 34%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(236, 72, 153, 0.14) 45%, transparent 72%);
+      animation: floatOrbMorph 16s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatOrbOne {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(6%, 8%, 0) scale(1.12); }
+    }
+
+    @keyframes floatOrbTwo {
+      0% { transform: translate3d(0, 0, 0) scale(1.05); }
+      100% { transform: translate3d(-8%, 6%, 0) scale(0.95); }
+    }
+
+    @keyframes floatOrbThree {
+      0% { transform: translate3d(0, 0, 0) scale(0.98); }
+      100% { transform: translate3d(7%, -7%, 0) scale(1.08); }
+    }
+
+    @keyframes floatOrbMorph {
+      0% { transform: translate3d(-6%, -4%, 0) scale(0.92) rotate(0deg); border-radius: 48% 52% 60% 40%; }
+      50% { transform: translate3d(5%, 6%, 0) scale(1.1) rotate(90deg); border-radius: 60% 40% 45% 55%; }
+      100% { transform: translate3d(-3%, 8%, 0) scale(1.02) rotate(180deg); border-radius: 42% 58% 52% 48%; }
+    }
+
+    .liquid-glass {
+      position: relative;
+      overflow: hidden;
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-specular);
+      transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .liquid-glass::before,
+    .liquid-glass-elevated::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.16) 48%, rgba(56, 189, 248, 0.12) 52%, transparent 80%);
+      transform: translateX(-120%);
+      animation: glassShimmerSweep 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      pointer-events: none;
+    }
+
+    @keyframes glassShimmerSweep {
+      0%, 55% { transform: translateX(-120%); }
+      85%, 100% { transform: translateX(120%); }
+    }
+
+    .liquid-glass-elevated {
+      position: relative;
+      overflow: hidden;
+      background: var(--glass-bg-elevated);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border-strong);
+      box-shadow: var(--glass-shadow), var(--glass-specular);
+      transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .floating-input-pill {
+      position: relative;
+      border-radius: 9999px;
+      background: var(--glass-bg-elevated);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border-strong);
+      box-shadow: var(--glass-shadow), var(--glass-specular);
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .floating-input-pill:focus-within {
+      border-color: rgba(56, 189, 248, 0.65);
+      box-shadow: 0 12px 36px var(--accent-glow), var(--glass-specular);
+    }
+
+    .user-bubble {
+      border-radius: 26px 26px 8px 26px;
+      background: var(--user-bubble-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--user-bubble-border);
+      box-shadow: 0 8px 24px rgba(14, 165, 233, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+      color: var(--user-bubble-text);
+    }
+
+    .ai-bubble {
+      border-radius: 26px 26px 26px 8px;
+      background: var(--ai-bubble-bg);
+      backdrop-filter: blur(24px) saturate(185%);
+      -webkit-backdrop-filter: blur(24px) saturate(185%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-specular);
+      color: var(--text-primary);
+    }
+
+    .pill-btn {
+      position: relative;
+      overflow: hidden;
+      border-radius: 9999px;
+      background: var(--glass-bg-elevated);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08), var(--glass-specular);
+      color: var(--text-primary);
+      transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .pill-btn:hover {
+      background: var(--glass-bg-hover);
+      border-color: var(--glass-border-strong);
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: 0 8px 24px var(--accent-glow), var(--glass-specular);
+    }
+
+    .pill-btn:active {
+      transform: translateY(0) scale(0.95);
+    }
+
+    .suggestion-chip {
+      position: relative;
+      overflow: hidden;
+      border-radius: 9999px;
+      background: var(--glass-bg-elevated);
+      backdrop-filter: blur(22px) saturate(185%);
+      -webkit-backdrop-filter: blur(22px) saturate(185%);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08), var(--glass-specular);
+      color: var(--text-primary);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .suggestion-chip:hover {
+      background: var(--glass-bg-hover);
+      border-color: rgba(56, 189, 248, 0.65);
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px var(--accent-glow), var(--glass-specular);
+    }
+
+    .suggestion-chip:active {
+      transform: scale(0.95);
+    }
+
+    .ripple-wave {
+      position: absolute;
+      border-radius: 9999px;
+      transform: scale(0);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, rgba(56, 189, 248, 0.25) 60%, transparent 100%);
+      animation: rippleExpand 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      pointer-events: none;
+    }
+
+    @keyframes rippleExpand {
+      to {
+        transform: scale(3.2);
+        opacity: 0;
+      }
+    }
+
+    .send-pill-btn {
+      position: relative;
+      overflow: hidden;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 55%, #a855f7 100%);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.42), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+      color: #ffffff;
+      transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .send-pill-btn:hover:not(:disabled) {
+      transform: scale(1.08) rotate(-4deg);
+      box-shadow: 0 10px 28px rgba(56, 189, 248, 0.62), inset 0 1px 1px rgba(255, 255, 255, 0.7);
+    }
+
+    .send-pill-btn:active:not(:disabled) {
+      transform: scale(0.92);
+    }
+
+    .send-pill-btn:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .emblem-float {
+      animation: emblemBreath 4.5s ease-in-out infinite;
+    }
+
+    @keyframes emblemBreath {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-7px) scale(1.04); }
+    }
+
+    .msg-enter {
+      animation: messageSpringIn 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes messageSpringIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.93);
+      }
+      70% {
+        opacity: 1;
+        transform: translateY(-2px) scale(1.008);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .typing-wave-bar {
+      width: 4px;
+      height: 14px;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, #38bdf8, #818cf8, #e879f9);
+      animation: liquidWavePulse 1.15s infinite ease-in-out;
+    }
+
+    .typing-wave-bar:nth-child(2) { animation-delay: 0.14s; }
+    .typing-wave-bar:nth-child(3) { animation-delay: 0.28s; }
+    .typing-wave-bar:nth-child(4) { animation-delay: 0.42s; }
+    .typing-wave-bar:nth-child(5) { animation-delay: 0.56s; }
+
+    @keyframes liquidWavePulse {
+      0%, 100% {
+        transform: scaleY(0.38);
+        opacity: 0.45;
+      }
+      50% {
+        transform: scaleY(1.25);
+        opacity: 1;
+      }
+    }
+
+    .shield-modal-backdrop {
+      background: rgba(4, 8, 20, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      animation: fadeInBackdrop 0.25s ease forwards;
+    }
+
+    @keyframes fadeInBackdrop {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .shield-modal-card {
+      animation: messageSpringIn 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .chat-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .chat-scroll::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 9999px;
+    }
+
+    #promptInput::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #promptInput::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 9999px;
+    }
+
+    .markdown-body p {
+      margin-bottom: 0.65rem;
+      line-height: 1.65;
+    }
+
+    .markdown-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .markdown-body strong {
+      font-weight: 700;
+    }
+
+    .markdown-body em {
+      font-style: italic;
+    }
+
+    .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+      font-weight: 700;
+      margin-top: 0.9rem;
+      margin-bottom: 0.45rem;
+      line-height: 1.35;
+    }
+
+    .markdown-body h1 { font-size: 1.22rem; }
+    .markdown-body h2 { font-size: 1.1rem; }
+    .markdown-body h3 { font-size: 1.02rem; }
+
+    .markdown-body ul, .markdown-body ol {
+      margin: 0.5rem 0 0.75rem 1.35rem;
+      line-height: 1.6;
+    }
+
+    .markdown-body ul {
+      list-style-type: disc;
+    }
+
+    .markdown-body ol {
+      list-style-type: decimal;
+    }
+
+    .markdown-body li {
+      margin-bottom: 0.3rem;
+    }
+
+    .markdown-body blockquote {
+      border-left: 3px solid #38bdf8;
+      padding-left: 0.85rem;
+      margin: 0.6rem 0;
+      opacity: 0.9;
+      font-style: italic;
+    }
+
+    .markdown-body a {
+      color: #38bdf8;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .inline-code {
+      background: var(--inline-code-bg);
+      color: var(--inline-code-text);
+      padding: 0.14rem 0.48rem;
+      border-radius: 9999px;
+      font-size: 0.88em;
+      font-weight: 600;
+    }
+
+    .code-card {
+      background: var(--code-bg);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 20px;
+      margin: 0.75rem 0;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .code-card-header {
+      background: var(--code-header);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.5rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .code-copy-pill {
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #e2e8f0;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .code-copy-pill:hover {
+      background: rgba(56, 189, 248, 0.28);
+      border-color: rgba(56, 189, 248, 0.55);
+      color: #ffffff;
+    }
+
+    .code-copy-pill.copied {
+      background: rgba(16, 185, 129, 0.28);
+      border-color: rgba(52, 211, 153, 0.6);
+      color: #6ee7b7;
+    }
+
+    .code-card pre {
+      margin: 0;
+      padding: 0.9rem 1rem;
+      overflow-x: auto;
+      color: #e2e8f0;
+      font-size: 0.84rem;
+      line-height: 1.55;
+      white-space: pre;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .anti-scrape-zone {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .honeypot-trap {
+      position: fixed;
+      left: -9999px;
+      top: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="relative flex flex-col h-[100dvh] max-h-[100dvh] overflow-hidden select-none">
+  <div class="ambient-canvas" aria-hidden="true">
+    <div class="mesh-orb orb-1"></div>
+    <div class="mesh-orb orb-2"></div>
+    <div class="mesh-orb orb-3"></div>
+    <div class="mesh-orb orb-4"></div>
+    <div class="mesh-orb orb-5"></div>
+  </div>
+
+  <div class="relative z-10 flex flex-col w-full h-full max-w-4xl mx-auto px-2.5 sm:px-6 pt-2.5 sm:pt-5 pb-2.5 sm:pb-5">
+    <header class="liquid-glass rounded-full px-2.5 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between gap-1.5 sm:gap-2 flex-shrink-0">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <div class="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 p-[1.5px] shadow-lg shadow-sky-500/25 flex-shrink-0">
+          <div class="w-full h-full rounded-full bg-slate-950/80 backdrop-blur-md flex items-center justify-center">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sky-300" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2.75C12 2.75 14.3 8.1 15.85 9.65C17.4 11.2 21.25 12 21.25 12C21.25 12 17.4 12.8 15.85 14.35C14.3 15.9 12 21.25 12 21.25C12 21.25 9.7 15.9 8.15 14.35C6.6 12.8 2.75 12 2.75 12C2.75 12 6.6 11.2 8.15 9.65C9.7 8.1 12 2.75 12 2.75Z" fill="url(#deeGradHeader)" />
+              <circle cx="18.5" cy="5.5" r="1.4" fill="#7dd3fc" />
+              <defs>
+                <linearGradient id="deeGradHeader" x1="2.75" y1="2.75" x2="21.25" y2="21.25" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#38bdf8" />
+                  <stop offset="0.5" stop-color="#818cf8" />
+                  <stop offset="1" stop-color="#e879f9" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+          <h1 class="brand-font text-sm sm:text-lg font-bold tracking-wide whitespace-nowrap">DEE AI</h1>
+          <span
+            class="hidden xs:inline-flex sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold flex-shrink-0"
+            style="background: var(--status-bg); color: var(--status-text); border: 1px solid var(--status-border);"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Trực tuyến
+          </span>
+          <span
+            title="Tường lửa DEE Shield đang bảo vệ"
+            class="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold flex-shrink-0"
+            style="background: var(--shield-bg); color: var(--shield-text); border: 1px solid var(--shield-border);"
+          >
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            DEE Shield
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <button
+          id="themeToggleBtn"
+          type="button"
+          aria-label="Chuyển đổi giao diện Sáng hoặc Tối"
+          class="pill-btn h-9 sm:h-10 px-2.5 sm:px-3.5 flex items-center justify-center gap-1.5 text-xs sm:text-sm font-bold flex-shrink-0"
+        >
+          <span id="themeIcon" class="flex items-center justify-center flex-shrink-0"></span>
+          <span id="themeLabel" class="whitespace-nowrap">Sáng</span>
+        </button>
+
+        <button
+          id="newChatBtn"
+          type="button"
+          aria-label="Bắt đầu cuộc trò chuyện mới"
+          class="pill-btn h-9 sm:h-10 px-2.5 sm:px-4 flex items-center justify-center gap-1 text-xs sm:text-sm font-bold flex-shrink-0"
+        >
+          <svg class="w-4 h-4 text-sky-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          <span class="whitespace-nowrap">Mới</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="chatScrollContainer" class="chat-scroll flex-1 overflow-y-auto px-1 sm:px-2 py-4 sm:py-6 flex flex-col">
+      <section id="welcomeView" class="my-auto flex flex-col items-center justify-center text-center px-3 py-6 max-w-2xl mx-auto">
+        <div class="emblem-float relative mb-6">
+          <div class="absolute -inset-3 rounded-full bg-gradient-to-tr from-sky-400/30 via-indigo-500/30 to-fuchsia-500/30 blur-xl"></div>
+          <div class="liquid-glass-elevated relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 flex items-center justify-center shadow-inner">
+              <svg class="w-8 h-8 sm:w-9 sm:h-9 text-white drop-shadow" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2.5C12 2.5 14.4 8.05 16.05 9.7C17.7 11.35 21.5 12 21.5 12C21.5 12 17.7 12.65 16.05 14.3C14.4 15.95 12 21.5 12 21.5C12 21.5 9.6 15.95 7.95 14.3C6.3 12.65 2.5 12 2.5 12C2.5 12 6.3 11.35 7.95 9.7C9.6 8.05 12 2.5 12 2.5Z" fill="currentColor" />
+                <circle cx="18.8" cy="5.2" r="1.5" fill="currentColor" opacity="0.85" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold mb-3 liquid-glass" style="color: var(--text-secondary);">
+          <span>Trợ lý AI thế hệ mới</span>
+        </div>
+
+        <h2 class="brand-font text-xl sm:text-2xl md:text-[26px] font-bold leading-relaxed mb-7 max-w-xl" style="color: var(--text-primary);">
+          Xin chào! Mình là DEE AI. Bạn đang muốn khám phá hay trò chuyện về điều gì hôm nay?
+        </h2>
+
+        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 w-full">
+          <button type="button" class="suggestion-chip px-4 py-2.5 text-xs sm:text-sm font-semibold flex items-center gap-2" data-prompt="Gợi ý cho mình vài ý tưởng sáng tạo thú vị nhé!">
+            <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+            <span>Gợi ý ý tưởng sáng tạo</span>
+          </button>
+
+          <button type="button" class="suggestion-chip px-4 py-2.5 text-xs sm:text-sm font-semibold flex items-center gap-2" data-prompt="Giải thích giúp mình một khái niệm công nghệ thật dễ hiểu">
+            <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+            <span>Giải thích khái niệm dễ hiểu</span>
+          </button>
+
+          <button type="button" class="suggestion-chip px-4 py-2.5 text-xs sm:text-sm font-semibold flex items-center gap-2" data-prompt="Viết cho mình một đoạn tản văn ngắn thật ấm áp">
+            <span class="w-2 h-2 rounded-full bg-fuchsia-400"></span>
+            <span>Viết một đoạn tản văn ngắn</span>
+          </button>
+
+          <button type="button" class="suggestion-chip px-4 py-2.5 text-xs sm:text-sm font-semibold flex items-center gap-2" data-prompt="Hỗ trợ mình học tập và viết mã nguồn hiệu quả">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>Hỗ trợ lập trình & học tập</span>
+          </button>
+        </div>
+      </section>
+
+      <div id="messagesList" class="anti-scrape-zone hidden flex-col gap-4 sm:gap-5 w-full pb-2"></div>
+    </main>
+
+    <footer class="flex-shrink-0 pt-2">
+      <form id="chatForm" class="floating-input-pill flex items-end gap-2 pl-4 sm:pl-5 pr-2 py-2 w-full">
+        <input type="text" id="deeHpField" name="hp_trap_9x" tabindex="-1" autocomplete="new-password" aria-hidden="true" class="honeypot-trap" />
+        <textarea
+          id="promptInput"
+          rows="1"
+          placeholder="Nhắn tin cho DEE AI..."
+          aria-label="Nhắn tin cho DEE AI"
+          class="w-full bg-transparent border-0 outline-none resize-none text-sm sm:text-[15px] leading-6 py-1.5 max-h-32 overflow-y-auto placeholder:opacity-60 select-text"
+          style="color: var(--text-primary);"
+        ></textarea>
+
+        <button
+          id="sendBtn"
+          type="submit"
+          disabled
+          aria-label="Gửi tin nhắn"
+          class="send-pill-btn w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center flex-shrink-0 cursor-pointer"
+        >
+          <svg class="w-5 h-5 translate-x-[1px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 2L11 13" />
+            <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+          </svg>
+        </button>
+      </form>
+    </footer>
+  </div>
+
+  <div id="securityModal" class="shield-modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="shield-modal-card liquid-glass-elevated rounded-3xl max-w-md w-full p-6 text-center">
+      <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-tr from-amber-400/25 via-rose-500/25 to-purple-500/25 border border-rose-400/40 flex items-center justify-center shadow-lg">
+        <svg class="w-7 h-7 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      </div>
+      <h3 class="brand-font text-lg font-bold mb-2" style="color: var(--text-primary);">Tường Lửa DEE Shield</h3>
+      <p id="securityModalReason" class="text-sm leading-relaxed mb-5" style="color: var(--text-secondary);">
+        Hệ thống phát hiện hành vi tự động hoặc tần suất truy cập bất thường. Bạn vui lòng thao tác chậm lại một chút để tiếp tục trò chuyện cùng mình nhé!
+      </p>
+      <button id="closeSecurityModalBtn" type="button" class="pill-btn px-6 py-2.5 text-sm font-bold">
+        Đã hiểu
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const apiKey = "";
+    const MODEL_NAME = "gemini-2.5-flash";
+    const SYSTEM_INSTRUCTION = "Bạn tên là DEE AI, một trợ lý trí tuệ nhân tạo thông minh, thân thiện, tinh tế và luôn sẵn sàng giúp đỡ. Trong mọi câu trả lời, bạn bắt buộc phải xưng là 'mình' và gọi người dùng là 'bạn' một cách tự nhiên, ấm áp, lịch sự và gần gũi bằng tiếng Việt. Trình bày câu trả lời rõ ràng, mạch lạc, sử dụng định dạng Markdown hợp lý khi giải thích hoặc viết mã nguồn.";
+
+    let conversationHistory = [];
+    let isGenerating = false;
+    let userManualTheme = null;
+
+    const htmlRoot = document.documentElement;
+    const themeToggleBtn = document.getElementById("themeToggleBtn");
+    const themeIcon = document.getElementById("themeIcon");
+    const themeLabel = document.getElementById("themeLabel");
+    const newChatBtn = document.getElementById("newChatBtn");
+    const welcomeView = document.getElementById("welcomeView");
+    const messagesList = document.getElementById("messagesList");
+    const chatScrollContainer = document.getElementById("chatScrollContainer");
+    const chatForm = document.getElementById("chatForm");
+    const promptInput = document.getElementById("promptInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const suggestionChips = document.querySelectorAll(".suggestion-chip");
+    const deeHpField = document.getElementById("deeHpField");
+    const securityModal = document.getElementById("securityModal");
+    const securityModalReason = document.getElementById("securityModalReason");
+    const closeSecurityModalBtn = document.getElementById("closeSecurityModalBtn");
+
+    const sunSvg = `<svg class="w-4 h-4 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg class="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    function applyTheme(theme) {
+      htmlRoot.setAttribute("data-theme", theme);
+      if (theme === "dark") {
+        themeIcon.innerHTML = sunSvg;
+        themeLabel.textContent = "Sáng";
+      } else {
+        themeIcon.innerHTML = moonSvg;
+        themeLabel.textContent = "Tối";
+      }
+    }
+
+    const systemColorQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    applyTheme(systemColorQuery.matches ? "dark" : "light");
+
+    systemColorQuery.addEventListener("change", (event) => {
+      if (userManualTheme === null) {
+        applyTheme(event.matches ? "dark" : "light");
+      }
+    });
+
+    themeToggleBtn.addEventListener("click", () => {
+      const currentTheme = htmlRoot.getAttribute("data-theme");
+      const nextTheme = currentTheme === "dark" ? "light" : "dark";
+      userManualTheme = nextTheme;
+      applyTheme(nextTheme);
+    });
+
+    function createButtonRipple(event, targetEl) {
+      const rect = targetEl.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const clientX = event.touches && event.touches[0] ? event.touches[0].clientX : event.clientX;
+      const clientY = event.touches && event.touches[0] ? event.touches[0].clientY : event.clientY;
+      const x = (typeof clientX === "number" ? clientX - rect.left : rect.width / 2) - size / 2;
+      const y = (typeof clientY === "number" ? clientY - rect.top : rect.height / 2) - size / 2;
+
+      const ripple = document.createElement("span");
+      ripple.className = "ripple-wave";
+      ripple.style.width = size + "px";
+      ripple.style.height = size + "px";
+      ripple.style.left = x + "px";
+      ripple.style.top = y + "px";
+      targetEl.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 680);
+    }
+
+    document.addEventListener("pointerdown", (event) => {
+      const interactivePill = event.target.closest(".pill-btn, .suggestion-chip, .send-pill-btn");
+      if (interactivePill && !interactivePill.disabled) {
+        createButtonRipple(event, interactivePill);
+      }
+    });
+
+    const DEE_FIREWALL = (() => {
+      const state = {
+        humanInteracted: false,
+        requestTimestamps: []
+      };
+
+      const markHuman = () => {
+        state.humanInteracted = true;
+      };
+
+      ["pointermove", "pointerdown", "keydown", "touchstart", "input", "click"].forEach((evt) => {
+        window.addEventListener(evt, markHuman, { passive: true });
+      });
+
+      function showAlert(reason) {
+        securityModalReason.textContent = reason;
+        securityModal.classList.remove("hidden");
+        securityModal.classList.add("flex");
+      }
+
+      function hideAlert() {
+        securityModal.classList.add("hidden");
+        securityModal.classList.remove("flex");
+      }
+
+      closeSecurityModalBtn.addEventListener("click", hideAlert);
+      securityModal.addEventListener("click", (event) => {
+        if (event.target === securityModal) {
+          hideAlert();
+        }
+      });
+
+      function detectAutomation() {
+        const ua = (navigator.userAgent || "").toLowerCase();
+        const botSignatures = ["headlesschrome", "phantomjs", "selenium", "puppeteer", "playwright", "nightmare", "curl/", "wget/", "python-requests"];
+        const hasBotUA = botSignatures.some((sig) => ua.includes(sig));
+        const hasWebdriver = Boolean(navigator.webdriver);
+        return hasWebdriver || hasBotUA;
+      }
+
+      document.addEventListener("contextmenu", (event) => {
+        if (event.target.closest("#promptInput, .code-card")) return;
+        event.preventDefault();
+        showAlert("Tường lửa DEE Shield đã khóa chuột phải để bảo vệ nội dung khỏi hành vi sao chép hàng loạt.");
+      });
+
+      document.addEventListener("keydown", (event) => {
+        const key = (event.key || "").toUpperCase();
+        const isInspectShortcut =
+          event.key === "F12" ||
+          ((event.ctrlKey || event.metaKey) && event.shiftKey && ["I", "J", "C"].includes(key)) ||
+          ((event.ctrlKey || event.metaKey) && ["U", "S"].includes(key));
+
+        if (isInspectShortcut) {
+          event.preventDefault();
+          showAlert("Tường lửa DEE Shield đã chặn phím tắt kiểm tra mã nguồn để bảo vệ hệ thống.");
+        }
+      });
+
+      document.addEventListener("copy", (event) => {
+        if (event.target.closest("#promptInput, .code-card")) return;
+        event.preventDefault();
+        showAlert("Tường lửa DEE Shield ngăn chặn hành vi cào dữ liệu văn bản tự động. Bạn vẫn có thể sao chép các khối mã nguồn bằng nút Sao chép nhé!");
+      });
+
+      function verifyRequest() {
+        if (deeHpField && deeHpField.value.trim() !== "") {
+          showAlert("Phát hiện truy cập tự động từ trường bẫy bảo mật. Yêu cầu đã bị từ chối.");
+          return false;
+        }
+
+        if (detectAutomation()) {
+          showAlert("Tường lửa DEE Shield phát hiện trình duyệt tự động hóa. Truy cập API bị tạm khóa.");
+          return false;
+        }
+
+        if (!state.humanInteracted) {
+          state.humanInteracted = true;
+        }
+
+        const now = Date.now();
+        state.requestTimestamps = state.requestTimestamps.filter((ts) => now - ts < 60000);
+        if (state.requestTimestamps.length >= 15) {
+          showAlert("Bạn đã đạt giới hạn 15 tin nhắn mỗi phút. Bạn vui lòng nghỉ một chút rồi tiếp tục trò chuyện cùng mình nhé!");
+          return false;
+        }
+
+        state.requestTimestamps.push(now);
+        return true;
+      }
+
+      return { verifyRequest };
+    })();
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatInlineMarkdown(rawText) {
+      let text = escapeHtml(rawText);
+      text = text.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+      text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      text = text.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+      text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      return text;
+    }
+
+    function renderMarkdownBlock(blockText) {
+      const lines = blockText.split("\n");
+      const htmlParts = [];
+      let inUnorderedList = false;
+      let inOrderedList = false;
+
+      const closeLists = () => {
+        if (inUnorderedList) {
+          htmlParts.push("</ul>");
+          inUnorderedList = false;
+        }
+        if (inOrderedList) {
+          htmlParts.push("</ol>");
+          inOrderedList = false;
+        }
+      };
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          closeLists();
+          continue;
+        }
+
+        const h3Match = trimmed.match(/^###\s+(.+)$/);
+        if (h3Match) {
+          closeLists();
+          htmlParts.push(`<h3>${formatInlineMarkdown(h3Match[1])}</h3>`);
+          continue;
+        }
+
+        const h2Match = trimmed.match(/^##\s+(.+)$/);
+        if (h2Match) {
+          closeLists();
+          htmlParts.push(`<h2>${formatInlineMarkdown(h2Match[1])}</h2>`);
+          continue;
+        }
+
+        const h1Match = trimmed.match(/^#\s+(.+)$/);
+        if (h1Match) {
+          closeLists();
+          htmlParts.push(`<h1>${formatInlineMarkdown(h1Match[1])}</h1>`);
+          continue;
+        }
+
+        const quoteMatch = trimmed.match(/^>\s*(.+)$/);
+        if (quoteMatch) {
+          closeLists();
+          htmlParts.push(`<blockquote>${formatInlineMarkdown(quoteMatch[1])}</blockquote>`);
+          continue;
+        }
+
+        const ulMatch = trimmed.match(/^[-*•]\s+(.+)$/);
+        if (ulMatch) {
+          if (inOrderedList) {
+            htmlParts.push("</ol>");
+            inOrderedList = false;
+          }
+          if (!inUnorderedList) {
+            htmlParts.push("<ul>");
+            inUnorderedList = true;
+          }
+          htmlParts.push(`<li>${formatInlineMarkdown(ulMatch[1])}</li>`);
+          continue;
+        }
+
+        const olMatch = trimmed.match(/^\d+\.\s+(.+)$/);
+        if (olMatch) {
+          if (inUnorderedList) {
+            htmlParts.push("</ul>");
+            inUnorderedList = false;
+          }
+          if (!inOrderedList) {
+            htmlParts.push("<ol>");
+            inOrderedList = true;
+          }
+          htmlParts.push(`<li>${formatInlineMarkdown(olMatch[1])}</li>`);
+          continue;
+        }
+
+        closeLists();
+        htmlParts.push(`<p>${formatInlineMarkdown(line)}</p>`);
+      }
+
+      closeLists();
+      return htmlParts.join("");
+    }
+
+    function renderMarkdown(markdownText) {
+      const codeBlockRegex = /```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g;
+      let lastIndex = 0;
+      let result = "";
+      let match;
+
+      while ((match = codeBlockRegex.exec(markdownText)) !== null) {
+        const beforeText = markdownText.slice(lastIndex, match.index);
+        if (beforeText.trim()) {
+          result += renderMarkdownBlock(beforeText);
+        }
+
+        const lang = escapeHtml(match[1] || "code");
+        const rawCode = match[2].replace(/\n$/, "");
+        const encodedCode = encodeURIComponent(rawCode);
+
+        result += `
+          <div class="code-card">
+            <div class="code-card-header">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-300">${lang}</span>
+              <button type="button" class="code-copy-pill" data-code="${encodedCode}">
+                <span>Sao chép</span>
+              </button>
+            </div>
+            <pre><code>${escapeHtml(rawCode)}</code></pre>
+          </div>
+        `;
+
+        lastIndex = codeBlockRegex.lastIndex;
+      }
+
+      const remainingText = markdownText.slice(lastIndex);
+      if (remainingText.trim()) {
+        result += renderMarkdownBlock(remainingText);
+      }
+
+      return result || `<p>${formatInlineMarkdown(markdownText)}</p>`;
+    }
+
+    function copyTextToClipboard(text, btnElement) {
+      const tempArea = document.createElement("textarea");
+      tempArea.value = text;
+      tempArea.style.position = "fixed";
+      tempArea.style.left = "-9999px";
+      document.body.appendChild(tempArea);
+      tempArea.select();
+      try {
+        document.execCommand("copy");
+        btnElement.classList.add("copied");
+        btnElement.innerHTML = "<span>Đã chép</span>";
+        setTimeout(() => {
+          btnElement.classList.remove("copied");
+          btnElement.innerHTML = "<span>Sao chép</span>";
+        }, 2000);
+      } catch (err) {
+        btnElement.innerHTML = "<span>Lỗi chép</span>";
+      } finally {
+        document.body.removeChild(tempArea);
+      }
+    }
+
+    messagesList.addEventListener("click", (event) => {
+      const copyBtn = event.target.closest(".code-copy-pill");
+      if (copyBtn) {
+        const rawCode = decodeURIComponent(copyBtn.getAttribute("data-code") || "");
+        copyTextToClipboard(rawCode, copyBtn);
+      }
+    });
+
+    function scrollToBottom() {
+      requestAnimationFrame(() => {
+        chatScrollContainer.scrollTo({
+          top: chatScrollContainer.scrollHeight,
+          behavior: "smooth"
+        });
+      });
+    }
+
+    function updateSendButtonState() {
+      const hasText = promptInput.value.trim().length > 0;
+      sendBtn.disabled = !hasText || isGenerating;
+    }
+
+    function autoResizeTextarea() {
+      promptInput.style.height = "auto";
+      promptInput.style.height = Math.min(promptInput.scrollHeight, 128) + "px";
+    }
+
+    promptInput.addEventListener("input", () => {
+      autoResizeTextarea();
+      updateSendButtonState();
+    });
+
+    promptInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        if (!sendBtn.disabled) {
+          handleSendMessage(promptInput.value);
+        }
+      }
+    });
+
+    function showChatArea() {
+      if (!welcomeView.classList.contains("hidden")) {
+        welcomeView.classList.add("hidden");
+        messagesList.classList.remove("hidden");
+        messagesList.classList.add("flex");
+      }
+    }
+
+    function appendUserMessage(text) {
+      showChatArea();
+      const wrapper = document.createElement("div");
+      wrapper.className = "msg-enter flex justify-end w-full";
+
+      const bubble = document.createElement("div");
+      bubble.className = "user-bubble max-w-[85%] sm:max-w-[75%] px-4 sm:px-5 py-3 sm:py-3.5 text-sm sm:text-[15px] leading-relaxed whitespace-pre-wrap break-words font-medium";
+      bubble.textContent = text;
+
+      wrapper.appendChild(bubble);
+      messagesList.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function appendTypingIndicator() {
+      showChatArea();
+      const wrapper = document.createElement("div");
+      wrapper.id = "typingIndicatorRow";
+      wrapper.className = "msg-enter flex items-start gap-2.5 sm:gap-3 w-full";
+
+      wrapper.innerHTML = `
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 p-[1.5px] flex-shrink-0 mt-0.5 shadow-md">
+          <div class="w-full h-full rounded-full bg-slate-950/80 flex items-center justify-center">
+            <svg class="w-4 h-4 text-sky-300" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.5C12 2.5 14.4 8.05 16.05 9.7C17.7 11.35 21.5 12 21.5 12C21.5 12 17.7 12.65 16.05 14.3C14.4 15.95 12 21.5 12 21.5C12 21.5 9.6 15.95 7.95 14.3C6.3 12.65 2.5 12 2.5 12C2.5 12 6.3 11.35 7.95 9.7C9.6 8.05 12 2.5 12 2.5Z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ai-bubble px-4 py-3.5 flex items-center gap-1.5">
+          <span class="typing-wave-bar"></span>
+          <span class="typing-wave-bar"></span>
+          <span class="typing-wave-bar"></span>
+          <span class="typing-wave-bar"></span>
+          <span class="typing-wave-bar"></span>
+        </div>
+      `;
+
+      messagesList.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function removeTypingIndicator() {
+      const indicator = document.getElementById("typingIndicatorRow");
+      if (indicator) {
+        indicator.remove();
+      }
+    }
+
+    function appendAssistantMessage(markdownText) {
+      removeTypingIndicator();
+      const wrapper = document.createElement("div");
+      wrapper.className = "msg-enter flex items-start gap-2.5 sm:gap-3 w-full";
+
+      const avatar = document.createElement("div");
+      avatar.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 p-[1.5px] flex-shrink-0 mt-0.5 shadow-md";
+      avatar.innerHTML = `
+        <div class="w-full h-full rounded-full bg-slate-950/80 flex items-center justify-center">
+          <svg class="w-4 h-4 text-sky-300" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.5C12 2.5 14.4 8.05 16.05 9.7C17.7 11.35 21.5 12 21.5 12C21.5 12 17.7 12.65 16.05 14.3C14.4 15.95 12 21.5 12 21.5C12 21.5 9.6 15.95 7.95 14.3C6.3 12.65 2.5 12 2.5 12C2.5 12 6.3 11.35 7.95 9.7C9.6 8.05 12 2.5 12 2.5Z"/>
+          </svg>
+        </div>
+      `;
+
+      const bubble = document.createElement("div");
+      bubble.className = "ai-bubble markdown-body max-w-[86%] sm:max-w-[78%] px-4 sm:px-5 py-3.5 sm:py-4 text-sm sm:text-[15px] break-words";
+      bubble.innerHTML = renderMarkdown(markdownText);
+
+      wrapper.appendChild(avatar);
+      wrapper.appendChild(bubble);
+      messagesList.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    async function callGeminiWithRetry(contents) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+      const payload = {
+        contents: contents,
+        systemInstruction: {
+          parts: [{ text: SYSTEM_INSTRUCTION }]
+        }
+      };
+
+      const delays = [1000, 2000, 4000];
+      for (let attempt = 0; attempt <= delays.length; attempt++) {
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+          const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!replyText) {
+            throw new Error("Empty response");
+          }
+          return replyText;
+        } catch (error) {
+          if (attempt < delays.length) {
+            await new Promise((resolve) => setTimeout(resolve, delays[attempt]));
+          } else {
+            throw error;
+          }
+        }
+      }
+    }
+
+    async function handleSendMessage(rawMessage) {
+      const message = rawMessage.trim();
+      if (!message || isGenerating) return;
+      if (!DEE_FIREWALL.verifyRequest()) return;
+
+      isGenerating = true;
+      promptInput.value = "";
+      promptInput.style.height = "auto";
+      updateSendButtonState();
+
+      appendUserMessage(message);
+      conversationHistory.push({
+        role: "user",
+        parts: [{ text: message }]
+      });
+
+      appendTypingIndicator();
+
+      try {
+        const aiReply = await callGeminiWithRetry(conversationHistory);
+        conversationHistory.push({
+          role: "model",
+          parts: [{ text: aiReply }]
+        });
+        appendAssistantMessage(aiReply);
+      } catch (err) {
+        conversationHistory.pop();
+        appendAssistantMessage("Xin lỗi bạn nhé, kết nối tới máy chủ DEE AI đang tạm thời gián đoạn. Bạn thử gửi lại tin nhắn sau giây lát nha!");
+      } finally {
+        isGenerating = false;
+        updateSendButtonState();
+      }
+    }
+
+    chatForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      handleSendMessage(promptInput.value);
+    });
+
+    suggestionChips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const promptText = chip.getAttribute("data-prompt");
+        if (promptText) {
+          handleSendMessage(promptText);
+        }
+      });
+    });
+
+    newChatBtn.addEventListener("click", () => {
+      if (isGenerating) return;
+      conversationHistory = [];
+      messagesList.innerHTML = "";
+      messagesList.classList.add("hidden");
+      messagesList.classList.remove("flex");
+      welcomeView.classList.remove("hidden");
+      promptInput.value = "";
+      promptInput.style.height = "auto";
+      updateSendButtonState();
+    });
+
+    updateSendButtonState();
+  </script>
+</body>
+</html>
